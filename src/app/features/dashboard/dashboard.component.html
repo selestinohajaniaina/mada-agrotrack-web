@@ -1,0 +1,59 @@
+<app-page-header title="Tableau de bord" description="Suivez en un coup d’œil les opérations agricoles et logistiques de vos programmes.">
+  <button class="btn-secondary"><ion-icon name="calendar-outline"></ion-icon> Campagne 2026 <ion-icon name="chevron-down-outline"></ion-icon></button>
+</app-page-header>
+
+<div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
+  @for (stat of stats$ | async; track stat.label) {
+    <article class="panel p-5 transition duration-200 hover:-translate-y-0.5 hover:shadow-panel">
+      <div class="flex items-start justify-between gap-3">
+        <div class="flex h-11 w-11 items-center justify-center rounded-xl" [class]="toneClasses(stat.tone)">
+          <ion-icon [name]="stat.icon" class="text-xl"></ion-icon>
+        </div>
+        <span class="rounded-full px-2 py-1 text-[11px] font-semibold" [class.bg-emerald-50]="stat.trend === 'up'" [class.text-emerald-700]="stat.trend === 'up'" [class.bg-slate-100]="stat.trend === 'stable'" [class.text-slate-600]="stat.trend === 'stable'" [class.bg-sky-50]="stat.trend === 'down'" [class.text-sky-700]="stat.trend === 'down'">{{ stat.change }}</span>
+      </div>
+      <p class="mt-5 text-2xl font-extrabold tracking-tight text-slate-950">{{ stat.value }}</p>
+      <p class="mt-1 text-sm font-medium text-slate-500">{{ stat.label }}</p>
+    </article>
+  }
+</div>
+
+<div class="mt-6 grid gap-6 xl:grid-cols-[1.6fr_1fr]">
+  <section class="panel overflow-hidden">
+    <div class="flex items-center justify-between border-b border-slate-100 px-5 py-5 sm:px-6">
+      <div><h2 class="font-bold text-slate-900">Évolution de la production</h2><p class="mt-1 text-sm text-slate-500">Volume produit sur les six derniers mois</p></div>
+      <button class="text-sm font-semibold text-emerald-700 hover:text-emerald-800">Voir le rapport</button>
+    </div>
+    <div class="p-5 sm:p-6">
+      <div class="mb-4 flex items-end gap-2"><span class="text-3xl font-extrabold text-slate-950">3 842 t</span><span class="mb-1 rounded-full bg-emerald-50 px-2 py-1 text-xs font-bold text-emerald-700">+8,2 %</span></div>
+      <div class="flex h-64 items-end gap-3 border-b border-l border-slate-200 px-3 pt-5 sm:gap-6 sm:px-6">
+        @for (point of production$ | async; track point.month) {
+          <div class="group flex h-full flex-1 flex-col justify-end">
+            <div class="relative w-full rounded-t-lg bg-gradient-to-t from-emerald-700 to-emerald-400 transition hover:from-emerald-800 hover:to-emerald-500" [style.height.%]="point.value">
+              <span class="absolute -top-7 left-1/2 -translate-x-1/2 text-xs font-bold text-slate-600 opacity-0 transition group-hover:opacity-100">{{ point.value }}%</span>
+            </div>
+            <span class="-mb-7 mt-2 text-center text-xs font-medium text-slate-500">{{ point.month }}</span>
+          </div>
+        }
+      </div>
+      <div class="h-8"></div>
+    </div>
+  </section>
+
+  <section class="panel overflow-hidden">
+    <div class="flex items-center justify-between border-b border-slate-100 px-5 py-5 sm:px-6"><div><h2 class="font-bold text-slate-900">Activités récentes</h2><p class="mt-1 text-sm text-slate-500">Dernières opérations enregistrées</p></div><button class="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-50"><ion-icon name="ellipsis-horizontal"></ion-icon></button></div>
+    <div class="divide-y divide-slate-100">
+      @for (activity of activities$ | async; track activity.id) {
+        <div class="flex gap-3 px-5 py-4 sm:px-6">
+          <div class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl" [class]="activityClasses(activity.type)"><span class="h-2 w-2 rounded-full bg-current"></span></div>
+          <div class="min-w-0 flex-1"><p class="text-sm font-semibold text-slate-800">{{ activity.title }}</p><p class="mt-0.5 truncate text-xs text-slate-500">{{ activity.description }}</p></div>
+          <span class="shrink-0 text-[11px] text-slate-400">{{ activity.time }}</span>
+        </div>
+      }
+    </div>
+  </section>
+</div>
+
+<div class="mt-6 rounded-2xl bg-gradient-to-r from-emerald-800 to-emerald-600 p-6 text-white shadow-lg shadow-emerald-900/10 sm:flex sm:items-center sm:justify-between">
+  <div><p class="text-lg font-bold">Campagne agricole 2026</p><p class="mt-1 text-sm text-emerald-100">74 % des objectifs de production sont déjà atteints.</p></div>
+  <button class="mt-4 rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-emerald-800 transition hover:bg-emerald-50 sm:mt-0">Consulter les objectifs</button>
+</div>

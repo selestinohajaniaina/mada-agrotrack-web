@@ -1,0 +1,90 @@
+<div class="min-h-screen bg-slate-50">
+  @if (sidebarOpen) {
+    <button aria-label="Fermer le menu" class="fixed inset-0 z-40 bg-slate-950/50 backdrop-blur-sm lg:hidden" (click)="closeMobileSidebar()"></button>
+  }
+
+  <aside
+    class="fixed inset-y-0 left-0 z-50 flex flex-col bg-slate-950 text-slate-300 shadow-2xl transition-all duration-300 lg:translate-x-0"
+    [class.-translate-x-full]="!sidebarOpen"
+    [class.translate-x-0]="sidebarOpen"
+    [class.w-72]="!sidebarCollapsed"
+    [class.lg:w-20]="sidebarCollapsed">
+    <div class="flex h-20 items-center border-b border-white/10 px-5" [class.justify-center]="sidebarCollapsed">
+      <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-green-600 text-lg font-black text-white shadow-lg shadow-emerald-950/50">MA</div>
+      @if (!sidebarCollapsed) {
+        <div class="ml-3 min-w-0">
+          <p class="truncate text-sm font-extrabold tracking-wide text-white">MADA AGROTRACK</p>
+          <p class="text-[11px] font-medium uppercase tracking-[.18em] text-emerald-400">Pilotage agricole</p>
+        </div>
+      }
+    </div>
+
+    <nav class="flex-1 space-y-1 overflow-y-auto px-3 py-6">
+      @for (item of primaryNav; track item.route) {
+        <a [routerLink]="item.route" routerLinkActive="bg-emerald-600 text-white shadow-lg shadow-emerald-950/40"
+          [routerLinkActiveOptions]="{ exact: true }" (click)="closeMobileSidebar()"
+          class="group flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition hover:bg-white/10 hover:text-white"
+          [class.justify-center]="sidebarCollapsed" [title]="sidebarCollapsed ? item.label : ''">
+          <ion-icon [name]="item.icon" class="text-xl"></ion-icon>
+          @if (!sidebarCollapsed) { <span>{{ item.label }}</span> }
+        </a>
+      }
+    </nav>
+
+    <div class="border-t border-white/10 p-3">
+      <a routerLink="/parametres" routerLinkActive="bg-white/10 text-white" (click)="closeMobileSidebar()"
+        class="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition hover:bg-white/10 hover:text-white" [class.justify-center]="sidebarCollapsed">
+        <ion-icon name="settings-outline" class="text-xl"></ion-icon>
+        @if (!sidebarCollapsed) { <span>Paramètres</span> }
+      </a>
+      <button class="mt-2 hidden w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-slate-400 transition hover:bg-white/10 hover:text-white lg:flex"
+        [class.justify-center]="sidebarCollapsed" (click)="toggleSidebar()">
+        <ion-icon [name]="sidebarCollapsed ? 'chevron-forward-outline' : 'chevron-back-outline'" class="text-lg"></ion-icon>
+        @if (!sidebarCollapsed) { <span>Réduire le menu</span> }
+      </button>
+    </div>
+  </aside>
+
+  <div class="min-h-screen transition-all duration-300" [class.lg:pl-72]="!sidebarCollapsed" [class.lg:pl-20]="sidebarCollapsed">
+    <header class="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-slate-200/80 bg-white/90 px-4 backdrop-blur-xl sm:px-6 lg:px-8">
+      <div class="flex items-center gap-3">
+        <button class="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 lg:hidden" (click)="sidebarOpen = true" aria-label="Ouvrir le menu">
+          <ion-icon name="menu-outline" class="text-2xl"></ion-icon>
+        </button>
+        <div>
+          <p class="hidden text-xs font-semibold uppercase tracking-wider text-emerald-700 sm:block">Programme agricole 2026</p>
+          <p class="text-sm font-semibold text-slate-800 sm:text-base">Vue opérationnelle</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button class="relative flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 text-slate-600 transition hover:bg-slate-50" aria-label="Notifications">
+          <ion-icon name="notifications-outline" class="text-xl"></ion-icon>
+          <span class="absolute right-2 top-2 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-white"></span>
+        </button>
+        <div class="relative">
+          <button class="flex items-center gap-3 rounded-xl p-1.5 text-left transition hover:bg-slate-50" (click)="profileOpen = !profileOpen">
+            <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-100 text-sm font-bold text-emerald-800">HR</div>
+            <div class="hidden sm:block">
+              <p class="text-sm font-semibold text-slate-800">Hery Rakoto</p>
+              <p class="text-xs text-slate-500">Direction MADA</p>
+            </div>
+            <ion-icon name="chevron-down-outline" class="hidden text-sm text-slate-400 sm:block"></ion-icon>
+          </button>
+          @if (profileOpen) {
+            <div class="absolute right-0 mt-2 w-52 rounded-xl border border-slate-200 bg-white p-2 shadow-xl">
+              <button class="w-full rounded-lg px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50">Mon profil</button>
+              <button class="w-full rounded-lg px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-50">Préférences</button>
+              <div class="my-1 border-t border-slate-100"></div>
+              <button class="w-full rounded-lg px-3 py-2 text-left text-sm text-rose-600 hover:bg-rose-50">Se déconnecter</button>
+            </div>
+          }
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto w-full h-[90vh] p-4 sm:p-6 lg:p-8 overflow-y-auto ">
+      <router-outlet />
+    </main>
+  </div>
+</div>
