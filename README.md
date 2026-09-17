@@ -1,4 +1,13 @@
-# MadaAgrotrackWeb
+# MADA AGROTRACK — prototype Web V1
+
+Backoffice Angular/Ionic fonctionnant exclusivement avec des données fictives locales.
+
+Le périmètre actuel couvre : tableau de bord calculé, gestion des cultivateurs
+individuels et associations, recherche/filtres, détail, modification, archivage,
+comptes utilisateurs, permissions simulées, connexion et profil de démonstration.
+
+Aucun backend, appel HTTP, stockage PostgreSQL, JWT ou synchronisation mobile
+n'est connecté. Les permissions affichées ne constituent pas une sécurité réelle.
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.2.
 

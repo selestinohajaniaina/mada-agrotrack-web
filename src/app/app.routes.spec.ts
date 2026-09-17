@@ -1,29 +1,9 @@
 import { routes } from './app.routes';
-
-describe('navigation V6.1', () => {
-  const childRoutes = routes.find(route => route.path === '')?.children ?? [];
-
-  it('exposes every primary V6.1 prototype route', () => {
-    const paths = childRoutes.map(route => route.path);
-    const expected = [
-      'dashboard', 'beneficiaires', 'carte-sites', 'cycles', 'besoins',
-      'financements', 'contributions', 'achats', 'stocks', 'distribution',
-      'equipements', 'visites', 'missions-audit', 'anomalies',
-      'validation-dossiers', 'passeport', 'programmes', 'bailleurs', 'rapports',
-      'utilisateurs-permissions', 'parametres'
-    ];
-
-    expected.forEach(path => expect(paths).withContext(path).toContain(path));
+describe('navigation Web V1', () => {
+  const children = routes.find(route => route.path === '')?.children ?? [];
+  it('exposes the current cultivateur and account scope', () => {
+    ['dashboard','cultivateurs','cultivateurs/individuels','cultivateurs/associations','cultivateurs/:id','cultivateurs/:id/modifier','comptes','comptes/nouveau','comptes/:id','comptes/:id/modifier','profil'].forEach(path => expect(children.some(route => route.path === path)).withContext(path).toBeTrue());
   });
-
-  it('keeps legacy URLs as redirects', () => {
-    expect(childRoutes.find(route => route.path === 'exploitations')?.redirectTo).toBe('beneficiaires');
-    expect(childRoutes.find(route => route.path === 'parcelles')?.redirectTo).toBe('carte-sites');
-  });
-
-  it('prepares livestock and aquaculture routes', () => {
-    const paths = childRoutes.map(route => route.path);
-    ['elevage', 'animaux-lots', 'sante-animale', 'vaccination', 'alimentation', 'aquaculture', 'qualite-eau', 'recoltes-aquacoles']
-      .forEach(path => expect(paths).withContext(path).toContain(path));
-  });
+  it('keeps login outside the protected shell', () => expect(routes.some(route => route.path === 'login')).toBeTrue());
+  it('does not expose out-of-scope advanced modules', () => expect(children.some(route => ['financements','stocks','elevage','aquaculture'].includes(route.path ?? ''))).toBeFalse());
 });
